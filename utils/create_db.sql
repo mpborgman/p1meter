@@ -29,6 +29,7 @@ create table test
     "42.7.0"  double precision,
     "62.7.0"  double precision,
     "24.2.1"  double precision,
+    "24.3.0"  double precision,
     "timestamp" timestamp
 );
 

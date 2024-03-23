@@ -29,6 +29,7 @@ ser.port = "/dev/serial0"
 
 
 async def retrieve(app) -> dict:
+    found_gas = False
     while True:
         try:
             # Read in all the lines until we find the checksum (line starting with an exclamation mark)
@@ -45,7 +46,13 @@ async def retrieve(app) -> dict:
                     telegram = telegram + telegram_line.decode()
                     checksum_found = True
                 else:
-                    telegram = telegram + telegram_line.decode()
+                    line = telegram_line.decode()
+                    # /ISk5\2MT382-1003 has a weird telegram were actual value is on the next line:
+                    # 0-1:24.3.0(240323230000)(00)(60)(1)(0-1:24.2.1)(m3)
+                    # (21113.239)
+                    line = line.replace("(0-1:24.2.1)", "\r\n0-1:24.2.1")
+                    line = line.replace("(m3)\r\n", "(m3)")
+                    telegram = telegram + line
 
         except Exception as ex:
             template = "An exception of type {0} occured. Arguments:\n{1!r}"
@@ -75,11 +82,9 @@ async def retrieve(app) -> dict:
                 # Gas needs another way to cleanup
                 if code in list_of_codes:
                     if 'm3' in value:
-                        (time, value) = re.findall('\((.*?)\)', value)
-                        value = float(value.lstrip('\(').rstrip('\)*m3'))
+                        value = float(value.lstrip('\(m3\)\(').rstrip('\)'))
                     else:
                         value = float(value.lstrip('\(').rstrip('\)*kWhA'))
-
                     telegram_values[code[4:]] = {
                         "value": value,
                         "description": list_of_codes[code]

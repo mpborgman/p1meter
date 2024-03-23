@@ -8,19 +8,13 @@ personal P1 Smart Meter reader. This reader continuously reads from the
 P1 meter and sends the data to a Postgresql server hosted on another Raspberry Pi
 at home.
 
+### Setup Raspberry Zero W
+Install a desired version of Raspberry with [Raspberry Pi imager](https://www.raspberrypi.com/software/). I have installed Raspberry Pi OS (Legacy 32-bit) Lite.
 
-### Credits
-Credits for the electronics go to:
-
-**Jan ten Hove:**
-* https://github.com/jantenhove
-* http://domoticx.com/p1-poort-slimme-meter-uitlezen-hardware/
-
-
-Credits for the initial code go to:
-
-**Jan van Haarst:**
-* https://github.com/jvhaarst
+After that install psychopg2, to make sure you have all teh necessary binaries`;
+```
+sudo apt install python3-psycopg2
+```
 
 ### Run the application on the Raspberry Pi Zero
 A method to run a program on your Raspberry Pi at startup is to use the systemd files. systemd provides a standard process for controlling what programs run when a Linux system boots up. Note that systemd is available only from the Jessie versions of Raspbian OS.
@@ -69,4 +63,18 @@ Reboot the Pi and your custom service should run:
 ```
 sudo reboot
 ```
+
+### Credits
+Credits for the electronics go to:
+
+**Jan ten Hove:**
+* https://github.com/jantenhove
+* http://domoticx.com/p1-poort-slimme-meter-uitlezen-hardware/
+
+
+Credits for the initial code go to:
+
+**Jan van Haarst:**
+* https://github.com/jvhaarst
+
 _Author: Michèl Borgman_
